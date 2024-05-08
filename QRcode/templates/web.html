@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+    <script>
+        // 当页面加载完成时执行的函数
+        window.onload = function() {
+            checkImage(); // 检查图片是否为空
+        };
+
+        // 生成 QR Code 的函数
+        function generateQRCode() {
+            var inputText = document.getElementById("verification_code").value.trim(); // 获取输入框的值并去除首尾空格
+            if (inputText === "") {
+                alert("请输入内容"); // 如果输入内容为空，弹出提示
+                return false; // 阻止表单提交
+            }
+            var qrCodeImage = document.getElementById("qr_code_img");
+            if (qrCodeImage.src === "data:image/png;base64,") {
+                document.getElementById("qr_code").style.display = "none"; // 如果图片为空，隐藏 QR Code 图片
+            } else {
+                document.getElementById("qr_code").style.display = "block"; // 如果图片不为空，显示 QR Code 图片
+            }
+            return true; // 允许表单提交
+        }
+
+        // 检查图片是否为空的函数
+        function checkImage() {
+            var img = document.getElementById('qr_code_img');
+            if (img && img.getAttribute('src') === 'data:image/png;base64,') {
+                img.style.display = 'none'; // 如果图片为空，隐藏图片
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>QR Code 生成器</h1>
+    <form action="/web.html" method="POST" onsubmit="return generateQRCode()">
+        <label for="verification_code">请输入内容:</label>
+        <input type="text" id="verification_code" name="verification_code" required>
+        <button type="submit">生成二维码</button>
+    </form>
+
+    <!-- QR Code 图片容器 -->
+    <div id="qr_code">
+        <img id="qr_code_img" src="data:image/png;base64,{{ qr }}">
+    </div>
+</body>
+</html>
